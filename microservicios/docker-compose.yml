@@ -4,16 +4,12 @@ services:
   db:
     image: mysql:latest
     environment:
-      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
-      MYSQL_DATABASE: usuariosDB
-      MYSQL_USER: root
-      MYSQL_ROOT_PASSWORD: ''
+      MYSQL_ROOT_PASSWORD: 'password' 
     volumes:
       - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - mysql-data:/var/lib/mysql
     ports:
-      - "3307:3306"
-    networks:
-      - app-network
+      - "3307:3306" 
 
   usuarios:
     build:
@@ -23,9 +19,8 @@ services:
       - "3001:3001"
     depends_on:
       - db
-    networks:
-      - app-network
-
+    restart: always
+      
   productos:
     build:
       context: ./productos
@@ -34,8 +29,6 @@ services:
       - "3002:3002"
     depends_on:
       - db
-    networks:
-      - app-network
 
   ordenes:
     build:
@@ -46,9 +39,7 @@ services:
     depends_on:
       - usuarios
       - productos
-      - db
-    networks:
-      - app-network
+      - db 
 
   web:
     build:
@@ -56,12 +47,5 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8082:80"
-    depends_on:
-      - db
-    networks:
-      - app-network
-
-networks:
-  app-network:
-    driver: bridge
-
+volumes:
+  mysql-data:

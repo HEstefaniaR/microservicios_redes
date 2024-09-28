@@ -3,16 +3,16 @@ const mysql = require('mysql2/promise');
 const connection = mysql.createPool({
     host: 'db',
     user: 'root',
-    password: '',
+    password: 'password',
     database: 'ordenesDB'
 });
 
 async function crearOrden(orden) {
-    const { nombre_cliente, email_cliente, total_cuenta } = orden;
+    const { nombreCliente, emailCliente, totalCuenta } = orden;
     try {
         const [result] = await connection.query(
-            'INSERT INTO ordenes (nombre_cliente, email_cliente, total_cuenta, fechahora) VALUES (?, ?, ?, NOW())',
-            [nombre_cliente, email_cliente, total_cuenta]
+            'INSERT INTO ordenes (nombreCliente, emailCliente, totalCuenta, fecha) VALUES (?, ?, ?, NOW())',
+            [nombreCliente, emailCliente, totalCuenta]
         );
         return result;
     } catch (error) {

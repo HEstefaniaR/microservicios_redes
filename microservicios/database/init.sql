@@ -8,6 +8,12 @@ CREATE TABLE IF NOT EXISTS usuarios (
     password VARCHAR(30) NOT NULL
 );
 
+-- Insertar usuarios
+INSERT INTO usuarios (nombre, email, usuario, password) VALUES
+('Admin', 'admin@example.com', 'admin', 'admin'),
+('User', 'user@example.com', 'user123', 'userpassword');
+
+
 -- Crear base de datos para productos
 CREATE DATABASE IF NOT EXISTS productosDB;
 USE productosDB;

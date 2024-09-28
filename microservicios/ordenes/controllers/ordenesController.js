@@ -48,9 +48,9 @@ router.post('/ordenes', async (req, res) => {
         const { nombre, email } = responseUsuario.data;
 
         const orden = { 
-            nombre_cliente: nombre, 
-            email_cliente: email, 
-            total_cuenta: totalCuenta 
+            nombreCliente: nombre, 
+            emailCliente: email, 
+            totalCuenta: totalCuenta 
         };
         await ordenesModel.crearOrden(orden);
 
