@@ -1,0 +1,63 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: 'password'
+    volumes:
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - mysql-data:/var/lib/mysql
+    ports:
+      - "3307:3306"
+
+  usuarios:
+    image: rbestfania/usuariosalmacen:latest
+    ports:
+      - "3001:3001"
+    depends_on:
+      - db
+
+  productos:
+    image: rbestfania/productosalmacen:latest
+    ports:
+      - "3002:3002"
+    depends_on:
+      - db
+
+  ordenes:
+    image: rbestfania/ordenesalmacen:latest
+    ports:
+      - "3003:3003"
+    depends_on:
+      - usuarios
+      - productos
+      - db
+
+  web1:
+    image: rbestfania/webalmacen:latest
+    depends_on:
+      - usuarios
+      - productos
+      - ordenes
+
+  web2:
+    image: rbestfania/webalmacen:latest
+    depends_on:
+      - usuarios
+      - productos
+      - ordenes
+
+  haproxy:
+    image: rbestfania/haproxyalmacen:latest
+    ports:
+      - "8082:80"
+    volumes:
+      - ./haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
+    depends_on:
+      - web1
+      - web2
+
+volumes:
+  mysql-data:
+
